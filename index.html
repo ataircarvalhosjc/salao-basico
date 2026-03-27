@@ -78,14 +78,12 @@
       background:
         radial-gradient(ellipse 90% 70% at 50% 110%, rgba(212,175,55,.1) 0%, transparent 65%),
         radial-gradient(ellipse 50% 40% at 85% 15%,  rgba(212,175,55,.06) 0%, transparent 60%),
-        var(--bg);
+        rgba(10,8,6,0.72);
     }
     .hero-image{
       position:absolute;inset:0;
       width:100%;height:100%;
       object-fit:cover;
-      opacity:0.3;
-      z-index:-1;
     }
     /* ── HERO FLOATING ICONS ── */
     .hero-icons{
@@ -274,9 +272,9 @@
 
     .team-grid{
       display:grid;
-      grid-template-columns:repeat(2,1fr);
+      grid-template-columns:1fr;
       gap:1.5rem;
-      max-width:700px;
+      max-width:350px;
       margin:0 auto;
     }
     .team-card{
@@ -570,9 +568,8 @@
 
 <!-- ── HERO ─────────────────────────────────────── -->
 <section id="hero">
-  <div class="hero-bg">
-    <img src="images/hero-image.jpg" alt="Robinho Cortes Barbearia" class="hero-image">
-  </div>
+  <img src="images/hero-image.jpg" alt="Robinho Cortes Barbearia" class="hero-image">
+  <div class="hero-bg"></div>
 
   <!-- Floating barbershop icons -->
   <div class="hero-icons">
@@ -845,13 +842,6 @@
         <p class="team-bio">Especialista em cortes masculinos clássicos e modernos. Referência na região em degradê, navalhado e acabamentos de alto padrão.</p>
         <button class="team-book-btn" onclick="bookWith('Robinho')">Agendar com Robinho</button>
       </div>
-      <div class="team-card reveal">
-        <div class="team-avatar">D</div>
-        <h3 class="team-name">Doni</h3>
-        <p class="team-role">Barbeiro</p>
-        <p class="team-bio">Mestre em estilos contemporâneos e barba artística. Combina técnica apurada com atenção total ao detalhe em cada cliente.</p>
-        <button class="team-book-btn" onclick="bookWith('Doni')">Agendar com Doni</button>
-      </div>
     </div>
   </div>
 </section>
@@ -873,7 +863,6 @@
         <p class="step-label">01 — Escolha o profissional</p>
         <div class="prof-grid" id="profContainer">
           <button class="prof-btn" data-prof="Robinho" onclick="pickProf(this,'Robinho')">✂ Robinho</button>
-          <button class="prof-btn" data-prof="Doni" onclick="pickProf(this,'Doni')">✂ Doni</button>
         </div>
       </div>
 
@@ -906,15 +895,15 @@
       <div class="footer-brand">
         <div class="footer-logo"><em>Robinho</em> Cortes</div>
         <p>Barbearia de confiança com atendimento personalizado. Cada corte é um cuidado com sua identidade e estilo.</p>
+        <p style="margin-top:.8rem;font-size:.72rem;color:var(--gold);opacity:.7">Fundada em Dezembro de 2024</p>
       </div>
       <div class="footer-col">
         <h4>Horários</h4>
         <ul>
-          <li>Segunda — Sexta</li>
-          <li>9h às 19h</li>
-          <li style="margin-top:.8rem">Sábado</li>
-          <li>9h às 18h</li>
-          <li style="margin-top:.8rem;color:rgba(154,143,128,.45)">Domingo — Fechado</li>
+          <li>Segunda a Sábado</li>
+          <li>08h às 19h</li>
+          <li style="margin-top:.8rem">Domingo</li>
+          <li>08h às 12h</li>
         </ul>
       </div>
       <div class="footer-col">
@@ -977,10 +966,13 @@
 
   // ── BOOKING ENGINE
   const WHATS = '5512981546315';
-  const SLOTS = [
-    '09:00','09:30','10:00','10:30','11:00','11:30',
-    '13:00','13:30','14:00','14:30','15:00','15:30',
+  const SLOTS_WEEK = [
+    '08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30',
+    '12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30',
     '16:00','16:30','17:00','17:30','18:00','18:30'
+  ];
+  const SLOTS_SUN = [
+    '08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30'
   ];
   const DAYS_PT = ['dom','seg','ter','qua','qui','sex','sáb'];
   const MONTHS_PT = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
@@ -1026,18 +1018,15 @@
     for (let i = 0; i < 14; i++) {
       const d = new Date(today);
       d.setDate(today.getDate() + i);
-      const closed = d.getDay() === 0; // closed Sunday
       const btn = document.createElement('button');
-      btn.className = 'day-btn' + (closed ? ' unavail' : '');
+      btn.className = 'day-btn';
       btn.innerHTML = `
         <span class="d-name">${DAYS_PT[d.getDay()]}</span>
         <span class="d-num">${d.getDate()}</span>
         <span class="d-month">${MONTHS_PT[d.getMonth()]}</span>
       `;
-      if (!closed) {
-        const key = d.toDateString();
-        btn.addEventListener('click', () => pickDay(btn, d, key));
-      }
+      const key = d.toDateString();
+      btn.addEventListener('click', () => pickDay(btn, d, key));
       c.appendChild(btn);
     }
   }
@@ -1047,15 +1036,16 @@
     btn.classList.add('selected');
     selDay = { date, key };
     selTime = null;
-    buildTimes(key);
+    buildTimes(key, date.getDay());
     updateConfirm();
   }
 
-  function buildTimes(key) {
+  function buildTimes(key, dayOfWeek) {
     const c = document.getElementById('timesContainer');
+    const slots = dayOfWeek === 0 ? SLOTS_SUN : SLOTS_WEEK;
     const booked = getBooked(key);
     c.innerHTML = '';
-    SLOTS.forEach(t => {
+    slots.forEach(t => {
       const isBooked = booked.has(t);
       const btn = document.createElement('button');
       btn.className = 'time-btn' + (isBooked ? ' booked' : '');
