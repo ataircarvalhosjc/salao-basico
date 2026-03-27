@@ -455,6 +455,154 @@
     }
     .booking-summary strong{color:var(--gold);font-style:normal}
 
+    /* ── PLANOS MENSAIS ────────────────────────── */
+    #planos{background:var(--bg)}
+    .planos-header{text-align:center;margin-bottom:4rem}
+
+    .planos-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:2rem;
+      max-width:860px;
+      margin:0 auto 5rem;
+    }
+    .plano-card{
+      position:relative;
+      border:1px solid var(--border);
+      background:var(--card-bg);
+      padding:3rem 2.5rem;
+      text-align:center;
+      transition:all .4s ease;
+      overflow:hidden;
+    }
+    .plano-card::before{
+      content:'';position:absolute;top:0;left:0;right:0;height:3px;
+      background:linear-gradient(to right,var(--gold-dark),var(--gold-light));
+    }
+    .plano-card.destaque{
+      border-color:var(--border-h);
+      background:rgba(212,175,55,.06);
+    }
+    .plano-card:hover{
+      transform:translateY(-6px);
+      border-color:var(--border-h);
+      box-shadow:0 20px 60px rgba(212,175,55,.1);
+    }
+    .plano-badge{
+      display:inline-block;
+      font-size:.58rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+      background:linear-gradient(135deg,var(--gold-dark),var(--gold-light));
+      color:var(--bg);padding:.3rem .9rem;margin-bottom:1.5rem;
+    }
+    .plano-nome{
+      font-family:'Playfair Display',serif;
+      font-size:1.5rem;font-weight:600;
+      color:var(--cream);margin-bottom:.5rem;
+    }
+    .plano-valor{
+      font-family:'Playfair Display',serif;
+      font-size:3.2rem;font-weight:700;
+      background:linear-gradient(135deg,var(--gold-dark),var(--gold-light));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+      line-height:1;margin:1.2rem 0;
+    }
+    .plano-valor span{
+      font-size:1.1rem;font-weight:400;
+      -webkit-text-fill-color:var(--cream-dim);
+      font-family:'Raleway',sans-serif;
+    }
+    .plano-periodo{
+      font-size:.68rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
+      color:var(--cream-dim);margin-bottom:2rem;
+    }
+    .plano-itens{
+      list-style:none;text-align:left;
+      margin-bottom:2rem;
+    }
+    .plano-itens li{
+      font-size:.82rem;font-weight:300;
+      color:var(--cream-dim);
+      padding:.5rem 0;
+      border-bottom:1px solid rgba(212,175,55,.06);
+      display:flex;align-items:center;gap:.7rem;
+    }
+    .plano-itens li::before{
+      content:'✦';
+      color:var(--gold);font-size:.6rem;
+      flex-shrink:0;
+    }
+    .plano-itens li:last-child{border-bottom:none}
+    .plano-obs{
+      font-size:.72rem;font-style:italic;
+      color:var(--cream-dim);opacity:.6;
+      margin-bottom:1.8rem;
+    }
+
+    /* ── PIX PAGAMENTO ──────────────────────── */
+    .pix-section{
+      max-width:680px;
+      margin:0 auto;
+      text-align:center;
+    }
+    .pix-titulo{
+      font-family:'Playfair Display',serif;
+      font-size:1.4rem;font-weight:500;
+      color:var(--cream);margin-bottom:.6rem;
+    }
+    .pix-sub{
+      font-size:.78rem;font-weight:300;
+      color:var(--cream-dim);margin-bottom:2.5rem;
+      font-style:italic;
+    }
+    .pix-wrapper{
+      display:inline-flex;
+      flex-direction:column;
+      align-items:center;
+      gap:1.5rem;
+      border:1px solid var(--border);
+      padding:2.5rem 3rem;
+      background:rgba(212,175,55,.02);
+      position:relative;
+    }
+    .pix-wrapper::before{
+      content:'';position:absolute;top:0;left:0;right:0;height:2px;
+      background:linear-gradient(to right,var(--gold-dark),var(--gold-light));
+    }
+    .pix-qr-frame{
+      width:200px;height:200px;
+      border:2px solid var(--border-h);
+      padding:10px;
+      background:#fff;
+      display:flex;align-items:center;justify-content:center;
+    }
+    .pix-qr-frame img{
+      width:100%;height:100%;
+      object-fit:contain;display:block;
+    }
+    .pix-label{
+      font-size:.58rem;font-weight:700;letter-spacing:.28em;text-transform:uppercase;
+      color:var(--gold);
+    }
+    .pix-key-display{
+      font-family:'Raleway',sans-serif;
+      font-size:.72rem;font-weight:500;
+      color:var(--cream-dim);
+      background:rgba(212,175,55,.05);
+      border:1px solid var(--border);
+      padding:.6rem 1.2rem;
+      letter-spacing:.04em;
+    }
+    .pix-nota{
+      font-size:.7rem;font-weight:300;
+      color:var(--cream-dim);opacity:.6;
+      font-style:italic;margin-top:.5rem;
+    }
+
+    @media(max-width:768px){
+      .planos-grid{grid-template-columns:1fr}
+      .pix-wrapper{padding:2rem 1.5rem}
+    }
+
     /* ── FOOTER ────────────────────────────────── */
     footer{
       background:#060504;
@@ -570,6 +718,7 @@
   <a href="#hero" class="nav-logo"><em>Robinho</em> Cortes</a>
   <ul class="nav-links">
     <li><a href="#services">Serviços</a></li>
+    <li><a href="#planos">Planos</a></li>
     <li><a href="#team">Equipe</a></li>
     <li><a href="#booking">Agendamento</a></li>
     <li><a href="#footer">Contato</a></li>
@@ -830,6 +979,74 @@
       </div>
 
     </div>
+  </div>
+</section>
+
+<div class="gold-stripe"></div>
+
+<!-- ── PLANOS MENSAIS ────────────────────────────── -->
+<section id="planos">
+  <div class="container">
+    <div class="planos-header">
+      <span class="section-label reveal">Economize todo mês</span>
+      <h2 class="section-title reveal">Planos <em>Mensais</em></h2>
+      <div class="divider reveal"><div class="divider-line"></div><div class="divider-gem"></div><div class="divider-line"></div></div>
+    </div>
+
+    <div class="planos-grid">
+
+      <!-- Plano Essencial -->
+      <div class="plano-card reveal">
+        <span class="plano-badge">Essencial</span>
+        <h3 class="plano-nome">Corte & Estilo</h3>
+        <div class="plano-valor">R$100 <span>/mês</span></div>
+        <p class="plano-periodo">Assinatura Mensal</p>
+        <ul class="plano-itens">
+          <li>4 cortes por mês</li>
+          <li>Sobrancelha (opcional)</li>
+          <li>Atendimento prioritário</li>
+          <li>Agendamento exclusivo</li>
+        </ul>
+        <p class="plano-obs">* Sobrancelha incluída mediante disponibilidade</p>
+        <a href="https://wa.me/5512981546315?text=Olá!%20Tenho%20interesse%20no%20Plano%20Essencial%20(R%24100/mês)%20–%204%20cortes%20%2B%20sobrancelha.%20Poderia%20me%20informar%20mais%3F" target="_blank" class="btn-gold">Quero este plano ↗</a>
+      </div>
+
+      <!-- Plano Premium -->
+      <div class="plano-card destaque reveal">
+        <span class="plano-badge">Premium</span>
+        <h3 class="plano-nome">Corte & Barba</h3>
+        <div class="plano-valor">R$160 <span>/mês</span></div>
+        <p class="plano-periodo">Assinatura Mensal</p>
+        <ul class="plano-itens">
+          <li>4 cortes por mês</li>
+          <li>Barba inclusa em todos</li>
+          <li>Atendimento VIP</li>
+          <li>Agendamento exclusivo</li>
+        </ul>
+        <p class="plano-obs">* O combo completo para quem não abre mão do visual</p>
+        <a href="https://wa.me/5512981546315?text=Olá!%20Tenho%20interesse%20no%20Plano%20Premium%20(R%24160/mês)%20–%204%20cortes%20%2B%20barba.%20Poderia%20me%20informar%20mais%3F" target="_blank" class="btn-gold">Quero este plano ↗</a>
+      </div>
+
+    </div>
+
+    <!-- PIX Pagamento -->
+    <div class="pix-section reveal">
+      <h3 class="pix-titulo">Pagamento via <em style="color:var(--gold);font-style:italic">Pix</em></h3>
+      <p class="pix-sub">Escaneie o QR Code ou copie a chave para efetuar o pagamento do seu plano</p>
+
+      <div class="pix-wrapper">
+        <span class="pix-label">QR Code Pix</span>
+        <div class="pix-qr-frame">
+          <img src="images/pix-qr.png" alt="QR Code Pix Robinho Cortes">
+        </div>
+        <div>
+          <p class="pix-label" style="margin-bottom:.5rem">Chave Pix</p>
+          <p class="pix-key-display">(12) 98154-6315</p>
+        </div>
+        <p class="pix-nota">Após o pagamento, envie o comprovante pelo WhatsApp para confirmar seu plano</p>
+      </div>
+    </div>
+
   </div>
 </section>
 
