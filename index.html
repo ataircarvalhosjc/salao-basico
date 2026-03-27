@@ -985,7 +985,7 @@
     if (!bookedCache[key]) {
       const n = 2 + Math.floor(Math.random() * 3);
       const set = new Set();
-      while (set.size < n) set.add(SLOTS[Math.floor(Math.random() * SLOTS.length)]);
+      while (set.size < n) set.add(SLOTS_WEEK[Math.floor(Math.random() * SLOTS_WEEK.length)]);
       bookedCache[key] = set;
     }
     return bookedCache[key];
