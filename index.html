@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maison Áurea — Salão de Beleza</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Raleway:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold:        #D4AF37;
+      --gold-light:  #F0D060;
+      --gold-dark:   #C9A84C;
+      --gold-glow:   rgba(212,175,55,.18);
+      --bg:          #0A0806;
+      --bg2:         #0E0B07;
+      --card-bg:     rgba(212,175,55,.035);
+      --cream:       #F5F0E8;
+      --cream-dim:   #9A8F80;
+      --border:      rgba(212,175,55,.18);
+      --border-h:    rgba(212,175,55,.55);
+    }
+
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    ::selection{background:var(--gold);color:var(--bg)}
+
+    body{
+      font-family:'Raleway',sans-serif;
+      background:var(--bg);
+      color:var(--cream);
+      overflow-x:hidden;
+    }
+
+    ::-webkit-scrollbar{width:5px}
+    ::-webkit-scrollbar-track{background:var(--bg)}
+    ::-webkit-scrollbar-thumb{background:var(--gold-dark);border-radius:3px}
+
+    /* ── NAV ───────────────────────────────────── */
+    nav{
+      position:fixed;top:0;width:100%;z-index:1000;
+      padding:1.6rem 5rem;
+      display:flex;align-items:center;justify-content:space-between;
+      transition:all .4s ease;
+    }
+    nav.scrolled{
+      background:rgba(10,8,6,.96);
+      backdrop-filter:blur(24px);
+      padding:1rem 5rem;
+      border-bottom:1px solid var(--border);
+    }
+    .nav-logo{
+      font-family:'Playfair Display',serif;
+      font-size:1.35rem;font-weight:600;
+      color:var(--gold);letter-spacing:.04em;
+      text-decoration:none;
+    }
+    .nav-logo em{font-style:italic;font-weight:400}
+    .nav-links{display:flex;gap:2.5rem;list-style:none}
+    .nav-links a{
+      font-size:.7rem;font-weight:600;
+      letter-spacing:.2em;text-transform:uppercase;
+      color:var(--cream-dim);text-decoration:none;
+      transition:color .3s;
+    }
+    .nav-links a:hover{color:var(--gold)}
+
+    /* ── HERO ──────────────────────────────────── */
+    #hero{
+      min-height:100vh;
+      position:relative;
+      display:flex;align-items:center;justify-content:center;
+      overflow:hidden;
+    }
+    .hero-bg{
+      position:absolute;inset:0;
+      background:
+        radial-gradient(ellipse 90% 70% at 50% 110%, rgba(212,175,55,.1) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 40% at 85% 15%,  rgba(212,175,55,.06) 0%, transparent 60%),
+        var(--bg);
+    }
+    /* ── HERO FLOATING ICONS ── */
+    .hero-icons{
+      position:absolute;inset:0;pointer-events:none;
+      color:var(--gold);
+    }
+    .hi{
+      position:absolute;
+      opacity:.09;
+      transition:opacity .3s;
+    }
+    .hi svg{display:block;width:100%;height:100%}
+
+    .hi-1 {top:6%;  left:4%;   width:90px; transform:rotate(22deg)}
+    .hi-2 {top:12%; right:6%;  width:130px;transform:rotate(-12deg)}
+    .hi-3 {top:52%; left:2%;   width:100px;transform:rotate(80deg)}
+    .hi-4 {bottom:8%;right:4%; width:85px; transform:rotate(-35deg)}
+    .hi-5 {top:28%; left:10%;  width:80px; transform:rotate(10deg)}
+    .hi-6 {bottom:18%;left:18%;width:110px;transform:rotate(8deg)}
+    .hi-7 {top:18%; right:18%; width:88px; transform:rotate(-18deg)}
+    .hi-8 {bottom:28%;right:12%;width:100px;transform:rotate(48deg)}
+    .hi-9 {top:45%; right:3%;  width:72px; transform:rotate(-20deg)}
+    .hi-10{top:72%; left:38%;  width:95px; transform:rotate(-5deg)}
+    .hi-11{top:4%;  left:42%;  width:65px; transform:rotate(18deg)}
+    .hi-12{bottom:5%;left:44%; width:80px; transform:rotate(-30deg)}
+
+    .hero-content{
+      position:relative;z-index:1;
+      text-align:center;padding:0 2rem;
+      max-width:960px;
+    }
+    .hero-pre{
+      font-size:.65rem;font-weight:700;
+      letter-spacing:.45em;text-transform:uppercase;
+      color:var(--gold);margin-bottom:1.5rem;
+      opacity:0;animation:fadeUp .8s ease .2s forwards;
+    }
+    .hero-title{
+      font-family:'Playfair Display',serif;
+      font-size:clamp(3.5rem,11vw,9rem);
+      font-weight:700;line-height:.9;
+      letter-spacing:-.02em;
+      opacity:0;animation:fadeUp .8s ease .4s forwards;
+    }
+    .hero-title em{
+      display:block;
+      font-style:italic;font-weight:400;
+      background:linear-gradient(135deg, var(--gold-dark) 0%, var(--gold-light) 50%, var(--gold-dark) 100%);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    .hero-tagline{
+      font-family:'Cormorant Garamond',serif;
+      font-size:clamp(1rem,2.2vw,1.4rem);
+      font-style:italic;font-weight:300;
+      color:var(--cream-dim);
+      margin:1.8rem 0 3rem;
+      opacity:0;animation:fadeUp .8s ease .6s forwards;
+    }
+    .hero-actions{
+      display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;
+      opacity:0;animation:fadeUp .8s ease .8s forwards;
+    }
+    .btn-gold{
+      padding:.9rem 2.8rem;
+      background:linear-gradient(135deg, var(--gold-dark), var(--gold-light));
+      color:var(--bg);
+      font-family:'Raleway',sans-serif;font-size:.72rem;
+      font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+      text-decoration:none;border:none;cursor:pointer;
+      transition:all .3s ease;position:relative;overflow:hidden;
+      display:inline-block;
+    }
+    .btn-gold::after{
+      content:'';position:absolute;inset:0;
+      background:rgba(255,255,255,.18);
+      opacity:0;transition:opacity .3s;
+    }
+    .btn-gold:hover{transform:translateY(-2px);box-shadow:0 10px 35px rgba(212,175,55,.35)}
+    .btn-gold:hover::after{opacity:1}
+
+    .btn-ghost{
+      padding:.9rem 2.8rem;
+      background:transparent;color:var(--cream);
+      font-family:'Raleway',sans-serif;font-size:.72rem;
+      font-weight:500;letter-spacing:.18em;text-transform:uppercase;
+      text-decoration:none;border:1px solid var(--border-h);
+      cursor:pointer;transition:all .3s ease;
+      display:inline-block;
+    }
+    .btn-ghost:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-2px)}
+
+    .scroll-hint{
+      position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);
+      display:flex;flex-direction:column;align-items:center;gap:.6rem;
+      opacity:0;animation:fadeIn 1s ease 1.6s forwards;
+    }
+    .scroll-hint span{font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;color:var(--cream-dim)}
+    .scroll-line{
+      width:1px;height:50px;
+      background:linear-gradient(to bottom, var(--gold), transparent);
+      animation:scrollBob 2s ease-in-out infinite;
+    }
+
+    /* ── LAYOUT UTILITIES ──────────────────────── */
+    .container{max-width:1200px;margin:0 auto;padding:0 5rem}
+    section{padding:7rem 0}
+
+    .section-label{
+      font-size:.62rem;font-weight:700;
+      letter-spacing:.38em;text-transform:uppercase;
+      color:var(--gold);margin-bottom:.9rem;
+      display:block;
+    }
+    .section-title{
+      font-family:'Playfair Display',serif;
+      font-size:clamp(2rem,4.5vw,3.2rem);
+      font-weight:600;line-height:1.1;
+    }
+    .section-title em{font-style:italic;font-weight:400;color:var(--gold)}
+
+    .divider{
+      display:flex;align-items:center;gap:1rem;
+      margin:1.5rem 0 3.5rem;
+    }
+    .divider-line{flex:1;height:1px;background:var(--border)}
+    .divider-gem{
+      width:8px;height:8px;
+      background:var(--gold);transform:rotate(45deg);
+    }
+
+    /* ── STRIPE SEPARATOR ──────────────────────── */
+    .gold-stripe{
+      height:1px;
+      background:linear-gradient(to right, transparent, var(--gold), transparent);
+    }
+
+    /* ── SERVICES ──────────────────────────────── */
+    #services{background:var(--bg2)}
+    .services-header{text-align:center;margin-bottom:4rem}
+
+    .services-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:1px;
+      background:var(--border);
+    }
+    .service-card{
+      background:var(--bg2);
+      padding:2.8rem 2.2rem;
+      position:relative;overflow:hidden;
+      transition:all .4s ease;
+    }
+    .service-card::before{
+      content:'';position:absolute;
+      bottom:0;left:0;right:0;height:2px;
+      background:linear-gradient(to right, var(--gold-dark), var(--gold-light));
+      transform:scaleX(0);transform-origin:left;
+      transition:transform .45s ease;
+    }
+    .service-card:hover{background:rgba(212,175,55,.04)}
+    .service-card:hover::before{transform:scaleX(1)}
+
+    .service-icon{
+      width:42px;height:42px;
+      color:var(--gold);margin-bottom:1.5rem;
+    }
+    .service-name{
+      font-family:'Playfair Display',serif;
+      font-size:1.15rem;font-weight:500;
+      color:var(--cream);margin-bottom:.7rem;
+    }
+    .service-desc{
+      font-size:.8rem;font-weight:300;
+      line-height:1.8;color:var(--cream-dim);
+    }
+    .service-price{
+      margin-top:1.5rem;
+      font-family:'Cormorant Garamond',serif;
+      font-size:1.05rem;font-style:italic;
+      color:var(--gold);
+    }
+
+    /* ── TEAM ──────────────────────────────────── */
+    #team{background:var(--bg)}
+    .team-header{text-align:center;margin-bottom:4rem}
+
+    .team-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:1.5rem;
+    }
+    .team-card{
+      text-align:center;
+      padding:2.5rem 1.5rem;
+      border:1px solid var(--border);
+      background:var(--card-bg);
+      position:relative;
+      transition:all .4s ease;
+    }
+    .team-card:hover{
+      border-color:var(--border-h);
+      transform:translateY(-5px);
+      background:rgba(212,175,55,.06);
+    }
+    .team-card::after{
+      content:'';
+      position:absolute;top:0;left:50%;transform:translateX(-50%);
+      width:40px;height:2px;
+      background:linear-gradient(to right,var(--gold-dark),var(--gold-light));
+    }
+    .team-avatar{
+      width:76px;height:76px;border-radius:50%;
+      background:linear-gradient(135deg, var(--gold-dark), var(--gold-light));
+      margin:0 auto 1.5rem;
+      display:flex;align-items:center;justify-content:center;
+      font-family:'Playfair Display',serif;
+      font-size:1.9rem;font-weight:700;
+      color:var(--bg);
+      box-shadow:0 0 30px rgba(212,175,55,.2);
+    }
+    .team-name{
+      font-family:'Playfair Display',serif;
+      font-size:1.05rem;font-weight:500;
+      color:var(--cream);margin-bottom:.4rem;
+    }
+    .team-role{
+      font-size:.62rem;font-weight:700;
+      letter-spacing:.18em;text-transform:uppercase;
+      color:var(--gold);margin-bottom:1rem;
+    }
+    .team-bio{
+      font-size:.78rem;font-weight:300;
+      line-height:1.8;color:var(--cream-dim);
+    }
+
+    /* ── BOOKING ───────────────────────────────── */
+    #booking{background:var(--bg2)}
+    .booking-header{text-align:center;margin-bottom:3.5rem}
+    .booking-wrapper{max-width:820px;margin:0 auto}
+
+    .booking-step{margin-bottom:2.5rem}
+    .step-label{
+      font-size:.62rem;font-weight:700;
+      letter-spacing:.3em;text-transform:uppercase;
+      color:var(--gold);margin-bottom:1.25rem;
+    }
+
+    .days-scroll{
+      display:flex;gap:.75rem;
+      overflow-x:auto;padding-bottom:.5rem;
+      scrollbar-width:thin;
+      scrollbar-color:var(--gold-dark) transparent;
+    }
+    .day-btn{
+      flex-shrink:0;width:74px;
+      padding:1rem 0;
+      background:transparent;
+      border:1px solid var(--border);
+      color:var(--cream-dim);
+      cursor:pointer;text-align:center;
+      transition:all .3s ease;
+      font-family:'Raleway',sans-serif;
+    }
+    .day-btn .d-name{
+      display:block;font-size:.58rem;font-weight:700;
+      letter-spacing:.15em;text-transform:uppercase;margin-bottom:.4rem;
+    }
+    .day-btn .d-num{
+      display:block;
+      font-family:'Playfair Display',serif;
+      font-size:1.6rem;font-weight:600;line-height:1;
+    }
+    .day-btn .d-month{
+      display:block;font-size:.58rem;
+      letter-spacing:.1em;margin-top:.3rem;
+    }
+    .day-btn:hover:not(.unavail){border-color:var(--border-h);color:var(--cream)}
+    .day-btn.selected{
+      background:linear-gradient(135deg,var(--gold-dark),var(--gold-light));
+      border-color:transparent;color:var(--bg);
+    }
+    .day-btn.selected .d-month{color:var(--bg);opacity:.7}
+    .day-btn.unavail{opacity:.28;cursor:not-allowed}
+
+    .times-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(92px,1fr));
+      gap:.75rem;
+    }
+    .time-btn{
+      padding:.8rem;
+      background:transparent;
+      border:1px solid var(--border);
+      color:var(--cream-dim);
+      font-family:'Raleway',sans-serif;
+      font-size:.85rem;font-weight:500;
+      cursor:pointer;text-align:center;
+      transition:all .3s ease;
+    }
+    .time-btn:hover:not(.booked){border-color:var(--border-h);color:var(--cream)}
+    .time-btn.selected{
+      background:linear-gradient(135deg,var(--gold-dark),var(--gold-light));
+      border-color:transparent;color:var(--bg);font-weight:700;
+    }
+    .time-btn.booked{opacity:.22;cursor:not-allowed;text-decoration:line-through}
+
+    .times-placeholder{
+      color:var(--cream-dim);font-size:.82rem;font-weight:300;
+      font-style:italic;grid-column:1/-1;padding:.5rem 0;
+    }
+
+    .booking-confirm{
+      margin-top:2.5rem;text-align:center;
+      opacity:0;transform:translateY(12px);
+      transition:all .45s ease;pointer-events:none;
+    }
+    .booking-confirm.show{opacity:1;transform:translateY(0);pointer-events:all}
+    .booking-summary{
+      font-family:'Cormorant Garamond',serif;
+      font-size:1.15rem;font-style:italic;
+      color:var(--cream-dim);margin-bottom:1.5rem;
+    }
+    .booking-summary strong{color:var(--gold);font-style:normal}
+
+    /* ── FOOTER ────────────────────────────────── */
+    footer{
+      background:#060504;
+      padding:4.5rem 0 2rem;
+      border-top:1px solid var(--border);
+    }
+    .footer-grid{
+      display:grid;
+      grid-template-columns:2fr 1fr 1fr 1fr;
+      gap:3rem;margin-bottom:3rem;
+    }
+    .footer-logo{
+      font-family:'Playfair Display',serif;
+      font-size:1.4rem;font-weight:600;
+      color:var(--gold);margin-bottom:1rem;
+    }
+    .footer-logo em{font-style:italic;font-weight:400}
+    .footer-brand p{
+      font-size:.8rem;font-weight:300;
+      line-height:1.9;color:var(--cream-dim);max-width:230px;
+    }
+    .footer-col h4{
+      font-size:.62rem;font-weight:700;
+      letter-spacing:.25em;text-transform:uppercase;
+      color:var(--gold);margin-bottom:1.25rem;
+    }
+    .footer-col ul{list-style:none}
+    .footer-col ul li{
+      font-size:.8rem;font-weight:300;
+      color:var(--cream-dim);margin-bottom:.65rem;
+      transition:color .3s;
+    }
+    .footer-col ul li:hover{color:var(--cream)}
+    .footer-bottom{
+      border-top:1px solid var(--border);
+      padding-top:1.5rem;
+      display:flex;align-items:center;justify-content:space-between;
+    }
+    .footer-bottom p{font-size:.7rem;color:var(--cream-dim);opacity:.45}
+
+    /* ── WHATSAPP FAB ──────────────────────────── */
+    .whats-fab{
+      position:fixed;bottom:2.5rem;right:2.5rem;
+      width:60px;height:60px;
+      background:#25D366;border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      text-decoration:none;
+      box-shadow:0 5px 25px rgba(37,211,102,.4);
+      z-index:999;transition:all .3s ease;
+      animation:fabPop .6s cubic-bezier(.34,1.56,.64,1) 2s both;
+    }
+    .whats-fab:hover{transform:scale(1.1);box-shadow:0 8px 35px rgba(37,211,102,.55)}
+    .whats-fab::before{
+      content:'';position:absolute;inset:-5px;
+      border-radius:50%;border:1px solid rgba(37,211,102,.4);
+      animation:ring 2.2s ease-in-out infinite;
+    }
+    .whats-fab svg{width:28px;height:28px;fill:#fff}
+
+    /* ── REVEAL ANIMATIONS ─────────────────────── */
+    .reveal{
+      opacity:0;transform:translateY(22px);
+      transition:opacity .7s ease, transform .7s ease;
+    }
+    .reveal.visible{opacity:1;transform:translateY(0)}
+
+    @keyframes fadeUp{
+      from{opacity:0;transform:translateY(28px)}
+      to{opacity:1;transform:translateY(0)}
+    }
+    @keyframes fadeIn{
+      from{opacity:0}to{opacity:1}
+    }
+    @keyframes scrollBob{
+      0%,100%{opacity:1;transform:scaleY(1)}
+      50%{opacity:.3;transform:scaleY(.65)}
+    }
+    @keyframes ring{
+      0%,100%{transform:scale(1);opacity:.4}
+      60%{transform:scale(1.2);opacity:0}
+    }
+    @keyframes fabPop{
+      from{opacity:0;transform:scale(0) rotate(-200deg)}
+      to{opacity:1;transform:scale(1) rotate(0)}
+    }
+
+    /* ── RESPONSIVE ────────────────────────────── */
+    @media(max-width:1100px){
+      .team-grid{grid-template-columns:repeat(2,1fr)}
+      .services-grid{grid-template-columns:repeat(2,1fr)}
+      .footer-grid{grid-template-columns:1fr 1fr;gap:2rem}
+    }
+    @media(max-width:768px){
+      nav{padding:1.2rem 1.5rem}
+      nav.scrolled{padding:.85rem 1.5rem}
+      .nav-links{display:none}
+      .container{padding:0 1.5rem}
+      section{padding:5rem 0}
+      .services-grid{grid-template-columns:1fr;gap:0}
+      .team-grid{grid-template-columns:repeat(2,1fr);gap:1rem}
+      .footer-grid{grid-template-columns:1fr}
+      .hero-actions{flex-direction:column;align-items:center}
+    }
+    @media(max-width:480px){
+      .team-grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ──────────────────────────────────────── -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo"><em>Maison</em> Áurea</a>
+  <ul class="nav-links">
+    <li><a href="#services">Serviços</a></li>
+    <li><a href="#team">Equipe</a></li>
+    <li><a href="#booking">Agendamento</a></li>
+    <li><a href="#footer">Contato</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ─────────────────────────────────────── -->
+<section id="hero">
+  <div class="hero-bg"></div>
+
+  <!-- Floating barbershop icons -->
+  <div class="hero-icons">
+
+    <!-- Scissors ×4 -->
+    <div class="hi hi-1">
+      <svg viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2">
+        <circle cx="16" cy="62" r="11"/><circle cx="64" cy="62" r="11"/>
+        <line x1="24" y1="54" x2="70" y2="6"/><line x1="56" y1="54" x2="10" y2="6"/>
+        <circle cx="40" cy="30" r="3.5" fill="currentColor" stroke="none"/>
+      </svg>
+    </div>
+    <div class="hi hi-4">
+      <svg viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2">
+        <circle cx="16" cy="62" r="11"/><circle cx="64" cy="62" r="11"/>
+        <line x1="24" y1="54" x2="70" y2="6"/><line x1="56" y1="54" x2="10" y2="6"/>
+        <circle cx="40" cy="30" r="3.5" fill="currentColor" stroke="none"/>
+      </svg>
+    </div>
+    <div class="hi hi-8">
+      <svg viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2">
+        <circle cx="16" cy="62" r="11"/><circle cx="64" cy="62" r="11"/>
+        <line x1="24" y1="54" x2="70" y2="6"/><line x1="56" y1="54" x2="10" y2="6"/>
+        <circle cx="40" cy="30" r="3.5" fill="currentColor" stroke="none"/>
+      </svg>
+    </div>
+    <div class="hi hi-11">
+      <svg viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2">
+        <circle cx="16" cy="62" r="11"/><circle cx="64" cy="62" r="11"/>
+        <line x1="24" y1="54" x2="70" y2="6"/><line x1="56" y1="54" x2="10" y2="6"/>
+        <circle cx="40" cy="30" r="3.5" fill="currentColor" stroke="none"/>
+      </svg>
+    </div>
+
+    <!-- Mustaches ×3 -->
+    <div class="hi hi-2">
+      <svg viewBox="0 0 120 48" fill="currentColor">
+        <path d="M60,26 C56,17 44,8 28,13 C14,17 5,25 7,30 C9,35 19,27 30,25 C41,23 53,30 60,26 C67,30 79,23 90,25 C101,27 111,35 113,30 C115,25 106,17 92,13 C76,8 64,17 60,26 Z"/>
+      </svg>
+    </div>
+    <div class="hi hi-6">
+      <svg viewBox="0 0 120 48" fill="currentColor">
+        <path d="M60,26 C56,17 44,8 28,13 C14,17 5,25 7,30 C9,35 19,27 30,25 C41,23 53,30 60,26 C67,30 79,23 90,25 C101,27 111,35 113,30 C115,25 106,17 92,13 C76,8 64,17 60,26 Z"/>
+      </svg>
+    </div>
+    <div class="hi hi-10">
+      <svg viewBox="0 0 120 48" fill="currentColor">
+        <path d="M60,26 C56,17 44,8 28,13 C14,17 5,25 7,30 C9,35 19,27 30,25 C41,23 53,30 60,26 C67,30 79,23 90,25 C101,27 111,35 113,30 C115,25 106,17 92,13 C76,8 64,17 60,26 Z"/>
+      </svg>
+    </div>
+
+    <!-- Combs ×2 -->
+    <div class="hi hi-3">
+      <svg viewBox="0 0 100 36" fill="currentColor">
+        <rect x="4" y="4" width="92" height="10" rx="4"/>
+        <rect x="10" y="14" width="5" height="18" rx="2"/>
+        <rect x="20" y="14" width="5" height="18" rx="2"/>
+        <rect x="30" y="14" width="5" height="18" rx="2"/>
+        <rect x="40" y="14" width="5" height="18" rx="2"/>
+        <rect x="50" y="14" width="5" height="18" rx="2"/>
+        <rect x="60" y="14" width="5" height="18" rx="2"/>
+        <rect x="70" y="14" width="5" height="18" rx="2"/>
+        <rect x="80" y="14" width="5" height="18" rx="2"/>
+      </svg>
+    </div>
+    <div class="hi hi-7">
+      <svg viewBox="0 0 100 36" fill="currentColor">
+        <rect x="4" y="4" width="92" height="10" rx="4"/>
+        <rect x="10" y="14" width="5" height="18" rx="2"/>
+        <rect x="20" y="14" width="5" height="18" rx="2"/>
+        <rect x="30" y="14" width="5" height="18" rx="2"/>
+        <rect x="40" y="14" width="5" height="18" rx="2"/>
+        <rect x="50" y="14" width="5" height="18" rx="2"/>
+        <rect x="60" y="14" width="5" height="18" rx="2"/>
+        <rect x="70" y="14" width="5" height="18" rx="2"/>
+        <rect x="80" y="14" width="5" height="18" rx="2"/>
+      </svg>
+    </div>
+
+    <!-- Straight razors ×2 -->
+    <div class="hi hi-5">
+      <svg viewBox="0 0 110 38" fill="currentColor">
+        <rect x="2" y="13" width="38" height="12" rx="5"/>
+        <path d="M38,13 L104,17 L104,21 L38,25 Z"/>
+        <rect x="38" y="18" width="66" height="2" rx="1" fill="rgba(10,8,6,.3)"/>
+      </svg>
+    </div>
+    <div class="hi hi-9">
+      <svg viewBox="0 0 110 38" fill="currentColor">
+        <rect x="2" y="13" width="38" height="12" rx="5"/>
+        <path d="M38,13 L104,17 L104,21 L38,25 Z"/>
+        <rect x="38" y="18" width="66" height="2" rx="1" fill="rgba(10,8,6,.3)"/>
+      </svg>
+    </div>
+
+    <!-- Barber pole pill ×1 -->
+    <div class="hi hi-12">
+      <svg viewBox="0 0 40 90" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+        <rect x="8" y="4" width="24" height="82" rx="12"/>
+        <path d="M8,22 Q20,28 32,22"/>
+        <path d="M8,38 Q20,44 32,38"/>
+        <path d="M8,54 Q20,60 32,54"/>
+        <path d="M8,70 Q20,76 32,70"/>
+      </svg>
+    </div>
+
+  </div>
+
+  <div class="hero-content">
+    <p class="hero-pre">Beleza &amp; Sofisticação</p>
+    <h1 class="hero-title">
+      Maison<br>
+      <em>Áurea</em>
+    </h1>
+    <p class="hero-tagline">Onde cada detalhe é uma obra de arte</p>
+    <div class="hero-actions">
+      <a href="#booking" class="btn-gold">Agendar Horário</a>
+      <a href="#services" class="btn-ghost">Nossos Serviços</a>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Descubra</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<div class="gold-stripe"></div>
+
+<!-- ── SERVICES ──────────────────────────────────── -->
+<section id="services">
+  <div class="container">
+    <div class="services-header">
+      <span class="section-label reveal">O que oferecemos</span>
+      <h2 class="section-title reveal">Nossos <em>Serviços</em></h2>
+      <div class="divider reveal"><div class="divider-line"></div><div class="divider-gem"></div><div class="divider-line"></div></div>
+    </div>
+
+    <div class="services-grid">
+
+      <div class="service-card reveal">
+        <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8 C18 8 12 16 12 28 C12 36 17 42 24 42 C31 42 36 36 36 28 C36 16 30 8 30 8"/>
+          <path d="M18 8 L24 6 L30 8"/>
+          <path d="M15 22 Q24 18 33 22"/>
+          <path d="M14 30 Q24 26 34 30"/>
+        </svg>
+        <h3 class="service-name">Corte & Estilo</h3>
+        <p class="service-desc">Cortes personalizados que realçam a sua personalidade, executados com técnica precisa e olhar artístico.</p>
+        <p class="service-price">A partir de R$ 85</p>
+      </div>
+
+      <div class="service-card reveal">
+        <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 32 Q14 14 24 10 Q34 14 40 32"/>
+          <path d="M12 26 Q24 20 36 26"/>
+          <path d="M10 32 Q24 28 38 32"/>
+          <circle cx="24" cy="38" r="4"/>
+          <path d="M20 38 Q8 42 6 36"/>
+          <path d="M28 38 Q40 42 42 36"/>
+        </svg>
+        <h3 class="service-name">Coloração & Mechas</h3>
+        <p class="service-desc">Balayage, ombré e mechas com pigmentos de alta fixação para um resultado vibrante e duradouro.</p>
+        <p class="service-price">A partir de R$ 180</p>
+      </div>
+
+      <div class="service-card reveal">
+        <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+          <ellipse cx="24" cy="24" rx="14" ry="18"/>
+          <path d="M14 18 Q24 14 34 18"/>
+          <path d="M12 24 Q24 20 36 24"/>
+          <path d="M14 30 Q24 26 34 30"/>
+          <path d="M24 6 L24 10 M18 7 L20 11 M30 7 L28 11"/>
+        </svg>
+        <h3 class="service-name">Tratamentos Capilares</h3>
+        <p class="service-desc">Hidratação profunda, reconstrução e nutrição com protocolos exclusivos para cabelos radiantes.</p>
+        <p class="service-price">A partir de R$ 120</p>
+      </div>
+
+      <div class="service-card reveal">
+        <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M16 10 Q24 6 32 10 L34 26 Q24 34 14 26 Z"/>
+          <path d="M18 16 L30 16"/>
+          <path d="M17 21 L31 21"/>
+          <path d="M19 26 L29 26"/>
+          <path d="M20 30 Q24 34 28 30 L28 40 Q24 44 20 40 Z"/>
+        </svg>
+        <h3 class="service-name">Barba & Barbearia</h3>
+        <p class="service-desc">Modelagem e acabamento de barba com navalha quente, toalha e produtos premium selecionados.</p>
+        <p class="service-price">A partir de R$ 55</p>
+      </div>
+
+      <div class="service-card reveal">
+        <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 20 Q24 10 40 20"/>
+          <path d="M8 20 C10 32 18 40 24 40 C30 40 38 32 40 20"/>
+          <path d="M14 22 Q24 16 34 22"/>
+          <path d="M12 28 Q24 22 36 28"/>
+          <path d="M20 8 C20 8 22 4 24 4 C26 4 28 8 28 8"/>
+        </svg>
+        <h3 class="service-name">Escova & Penteados</h3>
+        <p class="service-desc">Escova modeladora, progressiva e penteados sofisticados para cada ocasião especial da sua vida.</p>
+        <p class="service-price">A partir de R$ 70</p>
+      </div>
+
+      <div class="service-card reveal">
+        <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M16 12 Q12 12 12 18 L12 36 Q12 40 16 40 L32 40 Q36 40 36 36 L36 18 Q36 12 32 12"/>
+          <path d="M20 12 L20 8 Q20 6 22 6 L26 6 Q28 6 28 8 L28 12"/>
+          <path d="M18 24 L22 28 L30 20"/>
+          <path d="M16 12 L32 12"/>
+        </svg>
+        <h3 class="service-name">Manicure & Pedicure</h3>
+        <p class="service-desc">Cuidados completos para unhas com esmaltes das melhores marcas nacionais e importadas.</p>
+        <p class="service-price">A partir de R$ 45</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="gold-stripe"></div>
+
+<!-- ── TEAM ───────────────────────────────────────── -->
+<section id="team">
+  <div class="container">
+    <div class="team-header">
+      <span class="section-label reveal">Conheça os profissionais</span>
+      <h2 class="section-title reveal">Nossa <em>Equipe</em></h2>
+      <div class="divider reveal"><div class="divider-line"></div><div class="divider-gem"></div><div class="divider-line"></div></div>
+    </div>
+
+    <div class="team-grid">
+      <div class="team-card reveal">
+        <div class="team-avatar">J</div>
+        <h3 class="team-name">Juliana Ferreira</h3>
+        <p class="team-role">Colorista Sênior</p>
+        <p class="team-bio">Especialista em técnicas modernas de coloração com mais de 10 anos em salões de alto padrão. Mestre em balayage.</p>
+      </div>
+      <div class="team-card reveal">
+        <div class="team-avatar">R</div>
+        <h3 class="team-name">Rafael Mendes</h3>
+        <p class="team-role">Barbeiro & Hair Stylist</p>
+        <p class="team-bio">Mestre em cortes masculinos clássicos e contemporâneos. Transforma a tradição da barbearia em arte moderna.</p>
+      </div>
+      <div class="team-card reveal">
+        <div class="team-avatar">C</div>
+        <h3 class="team-name">Camila Santos</h3>
+        <p class="team-role">Especialista em Tratamentos</p>
+        <p class="team-bio">Formada em tricologia, Camila reconstrói cabelos danificados com protocolos exclusivos e resultados visíveis.</p>
+      </div>
+      <div class="team-card reveal">
+        <div class="team-avatar">L</div>
+        <h3 class="team-name">Lucas Vieira</h3>
+        <p class="team-role">Maquiador & Penteados</p>
+        <p class="team-bio">Artista completo, cria looks inesquecíveis para noivas e eventos harmonizando maquiagem e penteado.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="gold-stripe"></div>
+
+<!-- ── BOOKING ─────────────────────────────────────── -->
+<section id="booking">
+  <div class="container">
+    <div class="booking-header">
+      <span class="section-label reveal">Reserve seu momento</span>
+      <h2 class="section-title reveal">Agende seu <em>Horário</em></h2>
+      <div class="divider reveal"><div class="divider-line"></div><div class="divider-gem"></div><div class="divider-line"></div></div>
+    </div>
+
+    <div class="booking-wrapper">
+      <div class="booking-step reveal">
+        <p class="step-label">01 — Escolha o dia</p>
+        <div class="days-scroll" id="daysContainer"></div>
+      </div>
+
+      <div class="booking-step reveal">
+        <p class="step-label">02 — Escolha o horário</p>
+        <div class="times-grid" id="timesContainer">
+          <p class="times-placeholder">↑ Selecione um dia para ver os horários disponíveis</p>
+        </div>
+      </div>
+
+      <div class="booking-confirm" id="bookingConfirm">
+        <p class="booking-summary" id="bookingSummary"></p>
+        <a href="#" class="btn-gold" id="whatsBtn" target="_blank">
+          Confirmar via WhatsApp ↗
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ──────────────────────────────────────── -->
+<footer id="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo"><em>Maison</em> Áurea</div>
+        <p>Um espaço dedicado à sua beleza e bem-estar. Cada visita é uma experiência única de cuidado e sofisticação.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Horários</h4>
+        <ul>
+          <li>Segunda — Sexta</li>
+          <li>9h às 19h</li>
+          <li style="margin-top:.8rem">Sábado</li>
+          <li>9h às 18h</li>
+          <li style="margin-top:.8rem;color:rgba(154,143,128,.45)">Domingo — Fechado</li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Serviços</h4>
+        <ul>
+          <li>Corte & Estilo</li>
+          <li>Coloração & Mechas</li>
+          <li>Tratamentos</li>
+          <li>Barba & Barbearia</li>
+          <li>Escova & Penteados</li>
+          <li>Manicure & Pedicure</li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contato</h4>
+        <ul>
+          <li>📍 Rua das Flores, 123</li>
+          <li>Centro — Sua Cidade</li>
+          <li style="margin-top:.8rem">📞 (11) 99999-9999</li>
+          <li>✉ contato@maisonaurea.com</li>
+          <li style="margin-top:.8rem">@maisonaurea</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Maison Áurea. Todos os direitos reservados.</p>
+      <p>Feito com cuidado ✦</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ── WHATSAPP FAB ─────────────────────────────────── -->
+<a href="https://wa.me/5511999999999" class="whats-fab" target="_blank" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+  </svg>
+</a>
+
+<script>
+  // ── NAV SCROLL
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 70);
+  });
+
+  // ── INTERSECTION REVEAL
+  const revealEls = document.querySelectorAll('.reveal');
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 90);
+        revealObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  revealEls.forEach(el => revealObs.observe(el));
+
+  // ── BOOKING ENGINE
+  const WHATS = '5511999999999';
+  const SLOTS = ['09:00','10:00','11:00','13:00','14:00','15:00','16:00','17:00','18:00'];
+  const DAYS_PT = ['dom','seg','ter','qua','qui','sex','sáb'];
+  const MONTHS_PT = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+  const MONTHS_FULL = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+  const DAYS_FULL = ['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'];
+
+  // Pre-generate random booked slots per day key
+  const bookedCache = {};
+  function getBooked(key) {
+    if (!bookedCache[key]) {
+      const n = 2 + Math.floor(Math.random() * 3);
+      const set = new Set();
+      while (set.size < n) set.add(SLOTS[Math.floor(Math.random() * SLOTS.length)]);
+      bookedCache[key] = set;
+    }
+    return bookedCache[key];
+  }
+
+  let selDay = null, selTime = null;
+
+  // Build 14-day calendar
+  function buildDays() {
+    const c = document.getElementById('daysContainer');
+    c.innerHTML = '';
+    const today = new Date();
+    for (let i = 0; i < 14; i++) {
+      const d = new Date(today);
+      d.setDate(today.getDate() + i);
+      const closed = d.getDay() === 0; // closed Sunday
+      const btn = document.createElement('button');
+      btn.className = 'day-btn' + (closed ? ' unavail' : '');
+      btn.innerHTML = `
+        <span class="d-name">${DAYS_PT[d.getDay()]}</span>
+        <span class="d-num">${d.getDate()}</span>
+        <span class="d-month">${MONTHS_PT[d.getMonth()]}</span>
+      `;
+      if (!closed) {
+        const key = d.toDateString();
+        btn.addEventListener('click', () => pickDay(btn, d, key));
+      }
+      c.appendChild(btn);
+    }
+  }
+
+  function pickDay(btn, date, key) {
+    document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    selDay = { date, key };
+    selTime = null;
+    buildTimes(key);
+    updateConfirm();
+  }
+
+  function buildTimes(key) {
+    const c = document.getElementById('timesContainer');
+    const booked = getBooked(key);
+    c.innerHTML = '';
+    SLOTS.forEach(t => {
+      const isBooked = booked.has(t);
+      const btn = document.createElement('button');
+      btn.className = 'time-btn' + (isBooked ? ' booked' : '');
+      btn.textContent = t;
+      if (!isBooked) btn.addEventListener('click', () => pickTime(btn, t));
+      c.appendChild(btn);
+    });
+  }
+
+  function pickTime(btn, time) {
+    document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    selTime = time;
+    updateConfirm();
+  }
+
+  function updateConfirm() {
+    const el = document.getElementById('bookingConfirm');
+    const summary = document.getElementById('bookingSummary');
+    const whatsBtn = document.getElementById('whatsBtn');
+    if (selDay && selTime) {
+      const d = selDay.date;
+      const dateStr = `${DAYS_FULL[d.getDay()]}, ${d.getDate()} de ${MONTHS_FULL[d.getMonth()]}`;
+      summary.innerHTML = `Agendamento para <strong>${dateStr}</strong> às <strong>${selTime}</strong>`;
+      const msg = encodeURIComponent(`Olá! Gostaria de agendar um horário na Maison Áurea para ${dateStr} às ${selTime}. Poderia confirmar? 😊`);
+      whatsBtn.href = `https://wa.me/${WHATS}?text=${msg}`;
+      el.classList.add('show');
+    } else {
+      el.classList.remove('show');
+    }
+  }
+
+  buildDays();
+</script>
+</body>
+</html>
