@@ -1074,19 +1074,41 @@
     <div class="booking-wrapper">
 
       <div class="booking-step reveal">
-        <p class="step-label">01 — Escolha o profissional</p>
+        <p class="step-label">01 — Seu nome</p>
+        <input type="text" id="clienteName" placeholder="Digite seu nome completo"
+          style="width:100%;padding:.85rem 1rem;background:var(--bg2);border:1px solid rgba(212,175,55,.25);border-radius:8px;color:var(--cream);font-size:.95rem;outline:none;"
+          oninput="updateConfirm()">
+      </div>
+
+      <div class="booking-step reveal">
+        <p class="step-label">02 — Escolha o serviço</p>
+        <div class="prof-grid" id="serviceContainer">
+          <button class="prof-btn" data-srv="Corte" onclick="pickService(this,'Corte',35)">Corte</button>
+          <button class="prof-btn" data-srv="Corte + Barba" onclick="pickService(this,'Corte + Barba',60)">Corte + Barba</button>
+          <button class="prof-btn" data-srv="Barba" onclick="pickService(this,'Barba',25)">Barba</button>
+          <button class="prof-btn" data-srv="Pezinho" onclick="pickService(this,'Pezinho',15)">Pezinho</button>
+          <button class="prof-btn" data-srv="Sobrancelha" onclick="pickService(this,'Sobrancelha',15)">Sobrancelha</button>
+          <button class="prof-btn" data-srv="Pigmentação" onclick="pickService(this,'Pigmentação',20)">Pigmentação</button>
+          <button class="prof-btn" data-srv="Relaxamento" onclick="pickService(this,'Relaxamento',35)">Relaxamento</button>
+          <button class="prof-btn" data-srv="Luzes" onclick="pickService(this,'Luzes',40)">Luzes</button>
+          <button class="prof-btn" data-srv="Platinado" onclick="pickService(this,'Platinado',80)">Platinado</button>
+        </div>
+      </div>
+
+      <div class="booking-step reveal">
+        <p class="step-label">03 — Escolha o profissional</p>
         <div class="prof-grid" id="profContainer">
           <button class="prof-btn" data-prof="Robinho" onclick="pickProf(this,'Robinho')">✂ Robinho</button>
         </div>
       </div>
 
       <div class="booking-step reveal">
-        <p class="step-label">02 — Escolha o dia</p>
+        <p class="step-label">04 — Escolha o dia</p>
         <div class="days-scroll" id="daysContainer"></div>
       </div>
 
       <div class="booking-step reveal">
-        <p class="step-label">03 — Escolha o horário</p>
+        <p class="step-label">05 — Escolha o horário</p>
         <div class="times-grid" id="timesContainer">
           <p class="times-placeholder">↑ Selecione um dia para ver os horários disponíveis</p>
         </div>
@@ -1094,7 +1116,7 @@
 
       <div class="booking-confirm" id="bookingConfirm">
         <p class="booking-summary" id="bookingSummary"></p>
-        <a href="#" class="btn-gold" id="whatsBtn" target="_blank">
+        <a href="#" class="btn-gold" id="whatsBtn" target="_blank" onclick="enviarParaPlanilha()">
           Confirmar via WhatsApp ↗
         </a>
       </div>
@@ -1276,20 +1298,53 @@
     updateConfirm();
   }
 
+  let selService = null;
+  let selValor = 0;
+
+  function pickService(btn, service, valor) {
+    document.querySelectorAll('#serviceContainer .prof-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    selService = service;
+    selValor = valor;
+    updateConfirm();
+  }
+
   function updateConfirm() {
     const el = document.getElementById('bookingConfirm');
     const summary = document.getElementById('bookingSummary');
     const whatsBtn = document.getElementById('whatsBtn');
-    if (selProf && selDay && selTime) {
+    const clienteNome = document.getElementById('clienteName').value.trim();
+    if (selProf && selDay && selTime && selService && clienteNome) {
       const d = selDay.date;
       const dateStr = `${DAYS_FULL[d.getDay()]}, ${d.getDate()} de ${MONTHS_FULL[d.getMonth()]}`;
-      summary.innerHTML = `Agendamento com <strong>${selProf}</strong> — <strong>${dateStr}</strong> às <strong>${selTime}</strong>`;
-      const msg = encodeURIComponent(`Olá! Gostaria de agendar um corte com ${selProf} na Robinho Cortes Barbearia para ${dateStr} às ${selTime}. Poderia confirmar? ✂️`);
+      summary.innerHTML = `<strong>${clienteNome}</strong> — <strong>${selService}</strong> com <strong>${selProf}</strong><br><strong>${dateStr}</strong> às <strong>${selTime}</strong> — <strong>R$ ${selValor},00</strong>`;
+      const msg = encodeURIComponent(`Olá! Gostaria de agendar.\nNome: ${clienteNome}\nServiço: ${selService}\nProfissional: ${selProf}\nData: ${dateStr} às ${selTime}\nValor: R$ ${selValor},00 ✂️`);
       whatsBtn.href = `https://wa.me/${WHATS}?text=${msg}`;
       el.classList.add('show');
     } else {
       el.classList.remove('show');
     }
+  }
+
+  function enviarParaPlanilha() {
+    const clienteNome = document.getElementById('clienteName').value.trim();
+    if (!selProf || !selDay || !selTime || !selService || !clienteNome) return;
+    const d = selDay.date;
+    const dataFormatada = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+    const payload = {
+      data: dataFormatada,
+      horario: selTime,
+      cliente: clienteNome,
+      barbeiro: selProf,
+      servico: selService,
+      valor: selValor
+    };
+    fetch('https://script.google.com/macros/s/AKfycbyGdhgKzFP73TxG7jc2eyEw5nwnEBFLeJjje4gtrsfVQVJ2Wr5ODFeTon_yvG_6G_dL/exec', {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
   }
 
   buildDays();
