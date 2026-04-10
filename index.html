@@ -1298,14 +1298,17 @@
     updateConfirm();
   }
 
-  let selService = null;
-  let selValor = 0;
+  let selectedServices = [];
 
   function pickService(btn, service, valor) {
-    document.querySelectorAll('#serviceContainer .prof-btn').forEach(b => b.classList.remove('selected'));
-    btn.classList.add('selected');
-    selService = service;
-    selValor = valor;
+    const index = selectedServices.findIndex(s => s.name === service);
+    if (index > -1) {
+      selectedServices.splice(index, 1);
+      btn.classList.remove('selected');
+    } else {
+      selectedServices.push({ name: service, price: valor });
+      btn.classList.add('selected');
+    }
     updateConfirm();
   }
 
@@ -1314,11 +1317,13 @@
     const summary = document.getElementById('bookingSummary');
     const whatsBtn = document.getElementById('whatsBtn');
     const clienteNome = document.getElementById('clienteName').value.trim();
-    if (selProf && selDay && selTime && selService && clienteNome) {
+    if (selProf && selDay && selTime && selectedServices.length > 0 && clienteNome) {
       const d = selDay.date;
       const dateStr = `${DAYS_FULL[d.getDay()]}, ${d.getDate()} de ${MONTHS_FULL[d.getMonth()]}`;
-      summary.innerHTML = `<strong>${clienteNome}</strong> — <strong>${selService}</strong> com <strong>${selProf}</strong><br><strong>${dateStr}</strong> às <strong>${selTime}</strong> — <strong>R$ ${selValor},00</strong>`;
-      const msg = encodeURIComponent(`Olá! Gostaria de agendar.\nNome: ${clienteNome}\nServiço: ${selService}\nProfissional: ${selProf}\nData: ${dateStr} às ${selTime}\nValor: R$ ${selValor},00 ✂️`);
+      const servicesNames = selectedServices.map(s => s.name).join(' + ');
+      const totalValor = selectedServices.reduce((sum, s) => sum + s.price, 0);
+      summary.innerHTML = `<strong>${clienteNome}</strong> — <strong>${servicesNames}</strong> com <strong>${selProf}</strong><br><strong>${dateStr}</strong> às <strong>${selTime}</strong> — <strong>R$ ${totalValor},00</strong>`;
+      const msg = encodeURIComponent(`Olá! Gostaria de agendar.\nNome: ${clienteNome}\nServiços: ${servicesNames}\nProfissional: ${selProf}\nData: ${dateStr} às ${selTime}\nValor Total: R$ ${totalValor},00 ✂️`);
       whatsBtn.href = `https://wa.me/${WHATS}?text=${msg}`;
       el.classList.add('show');
     } else {
@@ -1328,16 +1333,18 @@
 
   function enviarParaPlanilha() {
     const clienteNome = document.getElementById('clienteName').value.trim();
-    if (!selProf || !selDay || !selTime || !selService || !clienteNome) return;
+    if (!selProf || !selDay || !selTime || selectedServices.length === 0 || !clienteNome) return;
     const d = selDay.date;
     const dataFormatada = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+    const servicesNames = selectedServices.map(s => s.name).join(' + ');
+    const totalValor = selectedServices.reduce((sum, s) => sum + s.price, 0);
     const payload = {
       data: dataFormatada,
       horario: selTime,
       cliente: clienteNome,
       barbeiro: selProf,
-      servico: selService,
-      valor: selValor
+      servico: servicesNames,
+      valor: totalValor
     };
     fetch('https://script.google.com/macros/s/AKfycbyGdhgKzFP73TxG7jc2eyEw5nwnEBFLeJjje4gtrsfVQVJ2Wr5ODFeTon_yvG_6G_dL/exec', {
       method: 'POST',
