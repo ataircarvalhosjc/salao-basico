@@ -245,6 +245,7 @@
       padding:2.8rem 2.2rem;
       position:relative;overflow:hidden;
       transition:all .4s ease;
+      cursor:pointer;
     }
     .service-card::before{
       content:'';position:absolute;
@@ -274,6 +275,25 @@
       font-family:'Cormorant Garamond',serif;
       font-size:1.05rem;font-style:italic;
       color:var(--gold);
+      display:flex;align-items:baseline;justify-content:space-between;
+      gap:.6rem;
+    }
+    .service-price::after{
+      content:"Reservar →";
+      font-family:'Raleway',sans-serif;
+      font-size:.6rem;font-style:normal;
+      letter-spacing:.22em;text-transform:uppercase;
+      color:var(--cream-dim);
+      opacity:0;transform:translateX(-6px);
+      transition:opacity .3s ease, transform .3s ease, color .3s ease;
+    }
+    .service-card:hover .service-price::after{
+      opacity:1;transform:translateX(0);
+      color:var(--gold);
+    }
+    @media(hover:none){
+      /* mobile: sempre mostra, já que hover não existe */
+      .service-price::after{opacity:.7;transform:none}
     }
 
     /* ── TEAM ──────────────────────────────────── */
@@ -568,17 +588,6 @@
       content:'';position:absolute;top:0;left:0;right:0;height:2px;
       background:linear-gradient(to right,var(--gold-dark),var(--gold-light));
     }
-    .pix-qr-frame{
-      width:200px;height:200px;
-      border:2px solid var(--border-h);
-      padding:10px;
-      background:#fff;
-      display:flex;align-items:center;justify-content:center;
-    }
-    .pix-qr-frame img{
-      width:100%;height:100%;
-      object-fit:contain;display:block;
-    }
     .pix-label{
       font-size:.58rem;font-weight:700;letter-spacing:.28em;text-transform:uppercase;
       color:var(--gold);
@@ -709,6 +718,191 @@
     @media(max-width:480px){
       .team-grid{grid-template-columns:1fr}
     }
+    /* ── MODAL DE CONFIRMAÇÃO DE ASSINATURA ───────── */
+    .plano-confirm-overlay{
+      position:fixed;inset:0;
+      background:rgba(5,4,3,.78);
+      backdrop-filter:blur(8px);
+      -webkit-backdrop-filter:blur(8px);
+      z-index:9999;
+      display:flex;align-items:center;justify-content:center;
+      padding:1.2rem;
+      opacity:0;pointer-events:none;
+      transition:opacity .3s ease;
+    }
+    .plano-confirm-overlay.show{opacity:1;pointer-events:auto}
+
+    .plano-confirm-modal{
+      background:linear-gradient(180deg, #13100B 0%, #0E0B07 100%);
+      border:1px solid rgba(212,175,55,.4);
+      border-radius:6px;
+      max-width:460px;width:100%;
+      padding:2.2rem 2rem;
+      box-shadow:
+        0 30px 80px rgba(0,0,0,.6),
+        0 0 60px rgba(212,175,55,.15),
+        inset 0 1px 0 rgba(212,175,55,.2);
+      transform:translateY(20px) scale(.96);
+      transition:transform .35s cubic-bezier(.2,1.3,.4,1);
+      position:relative;
+      max-height:92vh;
+      overflow-y:auto;
+    }
+    .plano-confirm-overlay.show .plano-confirm-modal{
+      transform:translateY(0) scale(1);
+    }
+
+    .plano-confirm-modal::before{
+      content:"";
+      position:absolute;top:0;left:50%;transform:translateX(-50%);
+      width:60px;height:1px;
+      background:linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    .plano-confirm-title{
+      font-family:'Playfair Display',serif;
+      font-size:1.4rem;
+      font-weight:600;
+      color:var(--cream);
+      text-align:center;
+      margin-bottom:.4rem;
+      line-height:1.3;
+    }
+    .plano-confirm-title em{color:var(--gold);font-style:italic;font-weight:400}
+
+    .plano-confirm-sub{
+      text-align:center;
+      font-size:.7rem;
+      letter-spacing:.28em;
+      text-transform:uppercase;
+      color:var(--cream-dim);
+      margin-bottom:1.6rem;
+    }
+
+    .plano-confirm-info{
+      background:rgba(212,175,55,.05);
+      border:1px solid rgba(212,175,55,.18);
+      border-radius:4px;
+      padding:1.1rem 1.2rem;
+      margin-bottom:1.2rem;
+    }
+    .plano-confirm-row{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:.5rem 0;
+      border-bottom:1px solid rgba(212,175,55,.1);
+      gap:.8rem;
+      flex-wrap:wrap;
+    }
+    .plano-confirm-row:last-child{border-bottom:none}
+    .plano-confirm-row .lbl{
+      font-size:.62rem;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      color:var(--cream-dim);
+      font-weight:600;
+    }
+    .plano-confirm-row .val{
+      font-family:'Playfair Display',serif;
+      font-size:1.05rem;
+      color:var(--cream);
+      font-weight:600;
+    }
+    .plano-confirm-row .val.gold{color:var(--gold)}
+    .plano-confirm-row .val.pix-val{
+      font-family:'Raleway',sans-serif;
+      font-size:.95rem;font-weight:600;
+      letter-spacing:.02em;
+    }
+
+    .plano-confirm-pix-copy{
+      display:inline-flex;align-items:center;gap:.4rem;
+      margin-left:.5rem;
+      padding:.3rem .6rem;
+      background:transparent;
+      border:1px solid rgba(212,175,55,.3);
+      color:var(--gold);
+      font-family:'Raleway',sans-serif;
+      font-size:.6rem;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      font-weight:600;
+      cursor:pointer;
+      border-radius:2px;
+      transition:all .2s ease;
+    }
+    .plano-confirm-pix-copy:hover{
+      background:rgba(212,175,55,.1);
+      border-color:var(--gold);
+    }
+    .plano-confirm-pix-copy.copied{
+      background:rgba(123,179,119,.15);
+      border-color:#7BB377;
+      color:#7BB377;
+    }
+
+    .plano-confirm-msg{
+      font-size:.85rem;
+      color:var(--cream-dim);
+      line-height:1.6;
+      text-align:center;
+      margin-bottom:1.6rem;
+      padding:0 .4rem;
+    }
+    .plano-confirm-msg strong{color:var(--gold);font-weight:600}
+
+    .plano-confirm-actions{
+      display:flex;gap:.7rem;
+    }
+    .plano-confirm-btn{
+      flex:1;
+      padding:.95rem 1rem;
+      font-family:'Raleway',sans-serif;
+      font-size:.72rem;font-weight:600;
+      letter-spacing:.22em;text-transform:uppercase;
+      border-radius:3px;
+      cursor:pointer;
+      transition:all .25s ease;
+      border:1px solid var(--gold);
+    }
+    .plano-confirm-btn-cancel{
+      background:transparent;
+      color:var(--cream);
+      border-color:rgba(212,175,55,.3);
+    }
+    .plano-confirm-btn-cancel:hover{
+      border-color:var(--gold);
+      color:var(--gold);
+    }
+    .plano-confirm-btn-ok{
+      background:var(--gold);
+      color:var(--bg);
+      border-color:var(--gold);
+    }
+    .plano-confirm-btn-ok:hover{
+      background:var(--gold-light);
+      box-shadow:0 0 22px rgba(212,175,55,.4);
+    }
+
+    .plano-confirm-close{
+      position:absolute;top:.7rem;right:.7rem;
+      width:32px;height:32px;
+      background:transparent;border:none;
+      color:var(--cream-dim);cursor:pointer;
+      font-size:1.4rem;line-height:1;
+      transition:color .2s ease;
+      border-radius:50%;
+    }
+    .plano-confirm-close:hover{color:var(--gold)}
+
+    @media(max-width:480px){
+      .plano-confirm-modal{padding:1.8rem 1.4rem}
+      .plano-confirm-title{font-size:1.2rem}
+      .plano-confirm-row{flex-direction:column;align-items:flex-start;gap:.2rem}
+      .plano-confirm-row .val{font-size:1rem}
+      .plano-confirm-pix-copy{margin-left:0;margin-top:.3rem}
+      .plano-confirm-actions{flex-direction:column-reverse}
+    }
+
   </style>
 </head>
 <body>
@@ -856,19 +1050,19 @@
 
     <div class="services-grid">
 
-      <div class="service-card reveal">
+      <div class="service-card reveal" data-srv-key="cabelo">
         <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
           <path d="M18 8 C18 8 12 16 12 28 C12 36 17 42 24 42 C31 42 36 36 36 28 C36 16 30 8 30 8"/>
           <path d="M18 8 L24 6 L30 8"/>
           <path d="M15 22 Q24 18 33 22"/>
           <path d="M14 30 Q24 26 34 30"/>
         </svg>
-        <h3 class="service-name">Cabelo</h3>
-        <p class="service-desc">Cortes personalizados que realçam a sua personalidade, executados com técnica precisa e olhar artístico.</p>
-        <p class="service-price">R$ 35,00</p>
+        <h3 class="service-name" data-name>Cabelo</h3>
+        <p class="service-desc" data-desc>Cortes personalizados que realçam a sua personalidade, executados com técnica precisa e olhar artístico.</p>
+        <p class="service-price" data-price>R$ 40,00</p>
       </div>
 
-      <div class="service-card reveal">
+      <div class="service-card reveal" data-srv-key="barba">
         <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
           <ellipse cx="24" cy="24" rx="14" ry="18"/>
           <path d="M14 18 Q24 14 34 18"/>
@@ -876,12 +1070,12 @@
           <path d="M14 30 Q24 26 34 30"/>
           <path d="M24 6 L24 10 M18 7 L20 11 M30 7 L28 11"/>
         </svg>
-        <h3 class="service-name">Barba</h3>
-        <p class="service-desc">Modelagem e acabamento de barba com navalha.</p>
-        <p class="service-price">R$ 25,00</p>
+        <h3 class="service-name" data-name>Barba</h3>
+        <p class="service-desc" data-desc>Modelagem e acabamento de barba com navalha.</p>
+        <p class="service-price" data-price>R$ 30,00</p>
       </div>
 
-      <div class="service-card reveal">
+      <div class="service-card reveal" data-srv-key="luzes">
         <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="24" cy="24" r="8"/>
           <path d="M16 16 L8 8"/>
@@ -893,12 +1087,12 @@
           <path d="M24 12 L24 4"/>
           <path d="M24 36 L24 44"/>
         </svg>
-        <h3 class="service-name">Luzes</h3>
-        <p class="service-desc">Técnica de luzes para realçar tons e dimensões no cabelo, criando um visual moderno e sofisticado.</p>
-        <p class="service-price">R$ 40,00</p>
+        <h3 class="service-name" data-name>Luzes</h3>
+        <p class="service-desc" data-desc>Técnica de luzes para realçar tons e dimensões no cabelo, criando um visual moderno e sofisticado.</p>
+        <p class="service-price" data-price>R$ 45,00</p>
       </div>
 
-      <div class="service-card reveal">
+      <div class="service-card reveal" data-srv-key="sobrancelha">
         <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
           <path d="M8 20 Q24 10 40 20"/>
           <path d="M8 20 C10 32 18 40 24 40 C30 40 38 32 40 20"/>
@@ -906,12 +1100,12 @@
           <path d="M12 28 Q24 22 36 28"/>
           <path d="M20 8 C20 8 22 4 24 4 C26 4 28 8 28 8"/>
         </svg>
-        <h3 class="service-name">Sobrancelha</h3>
-        <p class="service-desc">Design de sobrancelha com navalha, alinhamento preciso e acabamento que valoriza seu rosto.</p>
-        <p class="service-price">R$ 15,00</p>
+        <h3 class="service-name" data-name>Sobrancelha</h3>
+        <p class="service-desc" data-desc>Design de sobrancelha com navalha, alinhamento preciso e acabamento que valoriza seu rosto.</p>
+        <p class="service-price" data-price>R$ 20,00</p>
       </div>
 
-      <div class="service-card reveal">
+      <div class="service-card reveal" data-srv-key="pezinho">
         <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 8 L12 32 L16 36 L20 32 L20 8"/>
           <path d="M28 8 L28 32 L32 36 L36 32 L36 8"/>
@@ -919,12 +1113,12 @@
           <circle cx="32" cy="40" r="4"/>
           <path d="M8 36 L40 36"/>
         </svg>
-        <h3 class="service-name">Pezinho</h3>
-        <p class="service-desc">Acabamento de cabelo com navalha.</p>
-        <p class="service-price">R$ 15,00</p>
+        <h3 class="service-name" data-name>Pezinho</h3>
+        <p class="service-desc" data-desc>Acabamento de cabelo com navalha.</p>
+        <p class="service-price" data-price>R$ 20,00</p>
       </div>
 
-      <div class="service-card reveal">
+      <div class="service-card reveal" data-srv-key="alisante">
         <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
           <path d="M8 24 Q24 12 40 24"/>
           <path d="M8 24 C12 32 16 36 24 36 C32 36 36 32 40 24"/>
@@ -932,12 +1126,12 @@
           <path d="M10 32 Q24 24 38 32"/>
           <path d="M16 8 L16 12 M20 6 L20 14 M24 4 L24 16 M28 6 L28 14 M32 8 L32 12"/>
         </svg>
-        <h3 class="service-name">Alisante</h3>
-        <p class="service-desc">Tratamento alisante para cabelos lisos e sedosos, com produtos de alta qualidade para durabilidade e brilho.</p>
-        <p class="service-price">R$ 35,00</p>
+        <h3 class="service-name" data-name>Alisante</h3>
+        <p class="service-desc" data-desc>Tratamento alisante para cabelos lisos e sedosos, com produtos de alta qualidade para durabilidade e brilho.</p>
+        <p class="service-price" data-price>R$ 40,00</p>
       </div>
 
-      <div class="service-card reveal">
+      <div class="service-card reveal" data-srv-key="platinado">
         <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
           <path d="M8 24 Q24 8 40 24"/>
           <path d="M8 24 C12 36 16 40 24 40 C32 40 36 36 40 24"/>
@@ -947,12 +1141,12 @@
           <circle cx="28" cy="12" r="2"/>
           <circle cx="24" cy="16" r="1"/>
         </svg>
-        <h3 class="service-name">Platinado</h3>
-        <p class="service-desc">Descoloração completa para tom platinado, com cuidados especiais para manter a saúde e brilho dos fios.</p>
-        <p class="service-price">R$ 80,00</p>
+        <h3 class="service-name" data-name>Platinado</h3>
+        <p class="service-desc" data-desc>Descoloração completa para tom platinado, com cuidados especiais para manter a saúde e brilho dos fios.</p>
+        <p class="service-price" data-price>R$ 85,00</p>
       </div>
 
-      <div class="service-card reveal">
+      <div class="service-card reveal" data-srv-key="pigmentacao">
         <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
           <path d="M16 10 Q24 6 32 10 L34 26 Q24 34 14 26 Z"/>
           <path d="M18 16 L30 16"/>
@@ -960,9 +1154,9 @@
           <path d="M19 26 L29 26"/>
           <path d="M20 30 Q24 34 28 30 L28 40 Q24 44 20 40 Z"/>
         </svg>
-        <h3 class="service-name">Pigmentação</h3>
-        <p class="service-desc">Pigmentação de barba e cabelo para disfarçar falhas e realçar o visual com um acabamento impecável.</p>
-        <p class="service-price">R$ 20,00</p>
+        <h3 class="service-name" data-name>Pigmentação</h3>
+        <p class="service-desc" data-desc>Pigmentação de barba e cabelo para disfarçar falhas e realçar o visual com um acabamento impecável.</p>
+        <p class="service-price" data-price>R$ 25,00</p>
       </div>
 
     </div>
@@ -983,10 +1177,10 @@
     <div class="planos-grid">
 
       <!-- Plano Essencial -->
-      <div class="plano-card reveal">
-        <span class="plano-badge">Essencial</span>
-        <h3 class="plano-nome">Corte & Estilo</h3>
-        <div class="plano-valor">R$100 <span>/mês</span></div>
+      <div class="plano-card reveal" data-plano-key="essencial">
+        <span class="plano-badge" data-badge>Essencial</span>
+        <h3 class="plano-nome" data-nome>Corte & Estilo</h3>
+        <div class="plano-valor"><span data-valor>R$100</span> <span>/mês</span></div>
         <p class="plano-periodo">Assinatura Mensal</p>
         <ul class="plano-itens">
           <li>4 cortes por mês</li>
@@ -999,10 +1193,10 @@
       </div>
 
       <!-- Plano Premium -->
-      <div class="plano-card destaque reveal">
-        <span class="plano-badge">Premium</span>
-        <h3 class="plano-nome">Corte & Barba</h3>
-        <div class="plano-valor">R$160 <span>/mês</span></div>
+      <div class="plano-card destaque reveal" data-plano-key="premium">
+        <span class="plano-badge" data-badge>Premium</span>
+        <h3 class="plano-nome" data-nome>Corte & Barba</h3>
+        <div class="plano-valor"><span data-valor>R$160</span> <span>/mês</span></div>
         <p class="plano-periodo">Assinatura Mensal</p>
         <ul class="plano-itens">
           <li>4 cortes por mês</li>
@@ -1019,13 +1213,9 @@
     <!-- PIX Pagamento -->
     <div class="pix-section reveal">
       <h3 class="pix-titulo">Pagamento via <em style="color:var(--gold);font-style:italic">Pix</em></h3>
-      <p class="pix-sub">Escaneie o QR Code ou copie a chave para efetuar o pagamento do seu plano</p>
+      <p class="pix-sub">Copie a chave Pix abaixo para efetuar o pagamento do seu plano</p>
 
       <div class="pix-wrapper">
-        <span class="pix-label">QR Code Pix</span>
-        <div class="pix-qr-frame">
-          <img src="images/pix-qr.png" alt="QR Code Pix Robinho Cortes">
-        </div>
         <div>
           <p class="pix-label" style="margin-bottom:.5rem">Chave Pix</p>
           <p class="pix-key-display">330.922.968-85</p>
@@ -1083,15 +1273,15 @@
       <div class="booking-step reveal">
         <p class="step-label">02 — Escolha o serviço</p>
         <div class="prof-grid" id="serviceContainer">
-          <button class="prof-btn" data-srv="Corte" onclick="pickService(this,'Corte',35)">Corte</button>
-          <button class="prof-btn" data-srv="Corte + Barba" onclick="pickService(this,'Corte + Barba',60)">Corte + Barba</button>
-          <button class="prof-btn" data-srv="Barba" onclick="pickService(this,'Barba',25)">Barba</button>
-          <button class="prof-btn" data-srv="Pezinho" onclick="pickService(this,'Pezinho',15)">Pezinho</button>
-          <button class="prof-btn" data-srv="Sobrancelha" onclick="pickService(this,'Sobrancelha',15)">Sobrancelha</button>
-          <button class="prof-btn" data-srv="Pigmentação" onclick="pickService(this,'Pigmentação',20)">Pigmentação</button>
-          <button class="prof-btn" data-srv="Relaxamento" onclick="pickService(this,'Relaxamento',35)">Relaxamento</button>
-          <button class="prof-btn" data-srv="Luzes" onclick="pickService(this,'Luzes',40)">Luzes</button>
-          <button class="prof-btn" data-srv="Platinado" onclick="pickService(this,'Platinado',80)">Platinado</button>
+          <button class="prof-btn" data-srv="Corte"          data-srv-key="cabelo"      data-valor="40" onclick="pickService(this)">Corte</button>
+          <button class="prof-btn" data-srv="Corte + Barba"  data-srv-key="corteBarba"  data-valor="65" onclick="pickService(this)">Corte + Barba</button>
+          <button class="prof-btn" data-srv="Barba"          data-srv-key="barba"       data-valor="30" onclick="pickService(this)">Barba</button>
+          <button class="prof-btn" data-srv="Pezinho"        data-srv-key="pezinho"     data-valor="20" onclick="pickService(this)">Pezinho</button>
+          <button class="prof-btn" data-srv="Sobrancelha"    data-srv-key="sobrancelha" data-valor="20" onclick="pickService(this)">Sobrancelha</button>
+          <button class="prof-btn" data-srv="Pigmentação"    data-srv-key="pigmentacao" data-valor="25" onclick="pickService(this)">Pigmentação</button>
+          <button class="prof-btn" data-srv="Relaxamento"    data-srv-key="alisante"    data-valor="40" onclick="pickService(this)">Relaxamento</button>
+          <button class="prof-btn" data-srv="Luzes"          data-srv-key="luzes"       data-valor="45" onclick="pickService(this)">Luzes</button>
+          <button class="prof-btn" data-srv="Platinado"      data-srv-key="platinado"   data-valor="85" onclick="pickService(this)">Platinado</button>
         </div>
       </div>
 
@@ -1137,29 +1327,29 @@
         <h4>Horários</h4>
         <ul>
           <li>Segunda a Sábado</li>
-          <li>08h às 19h</li>
+          <li data-cfg="horarioSemana">08h às 19h</li>
           <li style="margin-top:.8rem">Domingo</li>
-          <li>08h às 12h</li>
+          <li data-cfg="horarioDomingo">08h às 12h</li>
         </ul>
       </div>
       <div class="footer-col">
         <h4>Serviços</h4>
-        <ul>
-          <li>Corte — R$ 35,00</li>
-          <li>Corte + Barba — R$ 60,00</li>
-          <li>Barba — R$ 25,00</li>
-          <li>Pigmentação — R$ 20,00</li>
-          <li>Sobrancelha — R$ 15,00</li>
-          <li>Relaxamento — R$ 35,00</li>
+        <ul id="footerServicesList">
+          <li data-srv-key="cabelo">Corte — <span data-price>R$ 40,00</span></li>
+          <li data-srv-key="corteBarba">Corte + Barba — <span data-price>R$ 65,00</span></li>
+          <li data-srv-key="barba">Barba — <span data-price>R$ 30,00</span></li>
+          <li data-srv-key="pigmentacao">Pigmentação — <span data-price>R$ 25,00</span></li>
+          <li data-srv-key="sobrancelha">Sobrancelha — <span data-price>R$ 20,00</span></li>
+          <li data-srv-key="alisante">Relaxamento — <span data-price>R$ 40,00</span></li>
         </ul>
       </div>
       <div class="footer-col">
         <h4>Contato</h4>
         <ul>
-          <li>📍 Av. São Jorge, 1685<br>Cidade Salvador — Jacareí, SP</li>
-          <li style="margin-top:.8rem">📞 (12) 98154-6315</li>
+          <li data-cfg="endereco">📍 Av. São Jorge, 1685<br>Cidade Salvador — Jacareí, SP</li>
+          <li style="margin-top:.8rem" data-cfg="telefone">📞 (12) 98154-6315</li>
           <li style="margin-top:.8rem">
-            <a href="https://wa.me/5512981546315?text=Olá!%20Gostaria%20de%20agendar%20um%20corte."
+            <a id="footerWhatsLink" href="https://wa.me/5512981546315?text=Olá!%20Gostaria%20de%20agendar%20um%20corte."
                target="_blank" style="color:var(--gold);text-decoration:none">
               💬 WhatsApp
             </a>
@@ -1298,17 +1488,14 @@
     updateConfirm();
   }
 
-  let selectedServices = [];
+  let selService = null;
+  let selValor = 0;
 
-  function pickService(btn, service, valor) {
-    const index = selectedServices.findIndex(s => s.name === service);
-    if (index > -1) {
-      selectedServices.splice(index, 1);
-      btn.classList.remove('selected');
-    } else {
-      selectedServices.push({ name: service, price: valor });
-      btn.classList.add('selected');
-    }
+  function pickService(btn) {
+    document.querySelectorAll('#serviceContainer .prof-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    selService = btn.dataset.srv;
+    selValor = parseInt(btn.dataset.valor, 10) || 0;
     updateConfirm();
   }
 
@@ -1317,13 +1504,11 @@
     const summary = document.getElementById('bookingSummary');
     const whatsBtn = document.getElementById('whatsBtn');
     const clienteNome = document.getElementById('clienteName').value.trim();
-    if (selProf && selDay && selTime && selectedServices.length > 0 && clienteNome) {
+    if (selProf && selDay && selTime && selService && clienteNome) {
       const d = selDay.date;
       const dateStr = `${DAYS_FULL[d.getDay()]}, ${d.getDate()} de ${MONTHS_FULL[d.getMonth()]}`;
-      const servicesNames = selectedServices.map(s => s.name).join(' + ');
-      const totalValor = selectedServices.reduce((sum, s) => sum + s.price, 0);
-      summary.innerHTML = `<strong>${clienteNome}</strong> — <strong>${servicesNames}</strong> com <strong>${selProf}</strong><br><strong>${dateStr}</strong> às <strong>${selTime}</strong> — <strong>R$ ${totalValor},00</strong>`;
-      const msg = encodeURIComponent(`Olá! Gostaria de agendar.\nNome: ${clienteNome}\nServiços: ${servicesNames}\nProfissional: ${selProf}\nData: ${dateStr} às ${selTime}\nValor Total: R$ ${totalValor},00 ✂️`);
+      summary.innerHTML = `<strong>${clienteNome}</strong> — <strong>${selService}</strong> com <strong>${selProf}</strong><br><strong>${dateStr}</strong> às <strong>${selTime}</strong> — <strong>R$ ${selValor},00</strong>`;
+      const msg = encodeURIComponent(`Olá! Gostaria de agendar.\nNome: ${clienteNome}\nServiço: ${selService}\nProfissional: ${selProf}\nData: ${dateStr} às ${selTime}\nValor: R$ ${selValor},00 ✂️`);
       whatsBtn.href = `https://wa.me/${WHATS}?text=${msg}`;
       el.classList.add('show');
     } else {
@@ -1333,18 +1518,16 @@
 
   function enviarParaPlanilha() {
     const clienteNome = document.getElementById('clienteName').value.trim();
-    if (!selProf || !selDay || !selTime || selectedServices.length === 0 || !clienteNome) return;
+    if (!selProf || !selDay || !selTime || !selService || !clienteNome) return;
     const d = selDay.date;
     const dataFormatada = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
-    const servicesNames = selectedServices.map(s => s.name).join(' + ');
-    const totalValor = selectedServices.reduce((sum, s) => sum + s.price, 0);
     const payload = {
       data: dataFormatada,
       horario: selTime,
       cliente: clienteNome,
       barbeiro: selProf,
-      servico: servicesNames,
-      valor: totalValor
+      servico: selService,
+      valor: selValor
     };
     fetch('https://script.google.com/macros/s/AKfycbyGdhgKzFP73TxG7jc2eyEw5nwnEBFLeJjje4gtrsfVQVJ2Wr5ODFeTon_yvG_6G_dL/exec', {
       method: 'POST',
@@ -1360,5 +1543,196 @@
   selProf = 'Robinho';
   document.querySelector('.prof-btn[data-prof="Robinho"]').classList.add('selected');
 </script>
+<!-- ── MODAL DE CONFIRMAÇÃO DE ASSINATURA ──────────── -->
+<div class="plano-confirm-overlay" id="planoConfirmOverlay" role="dialog" aria-modal="true" aria-labelledby="planoConfirmTitle">
+  <div class="plano-confirm-modal">
+    <button class="plano-confirm-close" aria-label="Fechar" id="planoConfirmClose">×</button>
+
+    <h3 class="plano-confirm-title" id="planoConfirmTitle">
+      Sua assinatura está <em>quase pronta</em>
+    </h3>
+    <p class="plano-confirm-sub">Confirme os dados</p>
+
+    <div class="plano-confirm-info">
+      <div class="plano-confirm-row">
+        <span class="lbl" id="pcLblPlano">Plano</span>
+        <span class="val" id="pcPlano">—</span>
+      </div>
+      <div class="plano-confirm-row">
+        <span class="lbl" id="pcLblValor">Valor mensal</span>
+        <span class="val gold" id="pcValor">—</span>
+      </div>
+      <div class="plano-confirm-row">
+        <span class="lbl">Chave Pix</span>
+        <span style="display:flex;align-items:center;flex-wrap:wrap">
+          <span class="val pix-val" id="pcPix">—</span>
+          <button class="plano-confirm-pix-copy" id="pcCopy" type="button">Copiar</button>
+        </span>
+      </div>
+    </div>
+
+    <p class="plano-confirm-msg" id="planoConfirmMsg">
+      Para ativar sua assinatura, pague a primeira mensalidade via <strong>Pix</strong>.<br>
+      Ao clicar em <strong>OK</strong>, você será levado ao WhatsApp para enviar o <strong>comprovante</strong> e concluirmos sua adesão.
+    </p>
+
+    <div class="plano-confirm-actions">
+      <button class="plano-confirm-btn plano-confirm-btn-cancel" id="planoConfirmCancel" type="button">Cancelar</button>
+      <button class="plano-confirm-btn plano-confirm-btn-ok" id="planoConfirmOk" type="button">OK, ir para WhatsApp</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── MODAL DE CONFIRMAÇÃO (PLANOS + SERVIÇOS) ─────── */
+(function(){
+  const overlay  = document.getElementById('planoConfirmOverlay');
+  const elTitle  = document.getElementById('planoConfirmTitle');
+  const elMsg    = document.getElementById('planoConfirmMsg');
+  const elLblPl  = document.getElementById('pcLblPlano');
+  const elLblVal = document.getElementById('pcLblValor');
+  const elPlano  = document.getElementById('pcPlano');
+  const elValor  = document.getElementById('pcValor');
+  const elPix    = document.getElementById('pcPix');
+  const btnOk    = document.getElementById('planoConfirmOk');
+  const btnCancel= document.getElementById('planoConfirmCancel');
+  const btnClose = document.getElementById('planoConfirmClose');
+  const btnCopy  = document.getElementById('pcCopy');
+
+  let pendingURL = '';
+
+  function getPixKey(){
+    const el = document.querySelector('.pix-key-display');
+    return el ? el.textContent.trim() : '—';
+  }
+
+  function getWhatsNumber(){
+    // pega o número do primeiro link wa.me presente no site (consistência)
+    const link = document.querySelector('a[href*="wa.me/"]');
+    if(link){
+      const m = link.href.match(/wa\.me\/(\d+)/);
+      if(m) return m[1];
+    }
+    return '5512981546315';
+  }
+
+  /**
+   * Abre o modal com config genérica.
+   * opts = { titleHTML, msgHTML, lblItem, lblValor, nome, valor, url }
+   */
+  function openModal(opts){
+    elTitle.innerHTML = opts.titleHTML;
+    elMsg.innerHTML   = opts.msgHTML;
+    elLblPl.textContent  = opts.lblItem;
+    elLblVal.textContent = opts.lblValor;
+    elPlano.textContent  = opts.nome;
+    elValor.textContent  = opts.valor;
+    elPix.textContent    = getPixKey();
+
+    pendingURL = opts.url;
+    overlay.classList.add('show');
+    document.body.style.overflow = 'hidden';
+
+    btnCopy.classList.remove('copied');
+    btnCopy.textContent = 'Copiar';
+  }
+
+  function close(){
+    overlay.classList.remove('show');
+    document.body.style.overflow = '';
+    pendingURL = '';
+  }
+
+  function confirm(){
+    const url = pendingURL;
+    close();
+    if(url) window.open(url, '_blank', 'noopener');
+  }
+
+  /* ── PLANOS ── */
+  document.querySelectorAll('.plano-card a.btn-gold').forEach(link=>{
+    link.addEventListener('click', function(e){
+      e.preventDefault();
+      const card = this.closest('.plano-card');
+      if(!card){ window.open(this.href,'_blank','noopener'); return; }
+
+      const nome  = card.querySelector('[data-nome]')?.textContent.trim() || '';
+      const badge = card.querySelector('[data-badge]')?.textContent.trim() || '';
+      const valor = card.querySelector('[data-valor]')?.textContent.trim() || '';
+
+      openModal({
+        titleHTML: 'Sua assinatura está <em>quase pronta</em>',
+        msgHTML:   'Para ativar sua assinatura, pague a primeira mensalidade via <strong>Pix</strong>.<br>Ao clicar em <strong>OK</strong>, você será levado ao WhatsApp para enviar o <strong>comprovante</strong> e concluirmos sua adesão.',
+        lblItem:   'Plano',
+        lblValor:  'Valor mensal',
+        nome:      badge ? `${badge} — ${nome}` : nome,
+        valor:     valor + (valor.includes('/') ? '' : ' / mês'),
+        url:       this.href
+      });
+    });
+  });
+
+  /* ── SERVIÇOS (cards de Cabelo, Barba, etc.) ── */
+  document.querySelectorAll('.service-card[data-srv-key]').forEach(card=>{
+    card.addEventListener('click', function(e){
+      // ignora clique em links/botões dentro do card (caso existam no futuro)
+      if(e.target.closest('a,button')) return;
+
+      const nome  = this.querySelector('[data-name]')?.textContent.trim() || '';
+      const valor = this.querySelector('[data-price]')?.textContent.trim() || '';
+      const num   = getWhatsNumber();
+      const txt   = `Olá! Tenho interesse no serviço *${nome}* (${valor}). Já fiz o Pix e estou enviando o comprovante para confirmar minha reserva.`;
+      const url   = `https://wa.me/${num}?text=${encodeURIComponent(txt)}`;
+
+      openModal({
+        titleHTML: 'Confirme sua <em>reserva</em>',
+        msgHTML:   `Para reservar seu horário de <strong>${nome}</strong>, efetue o pagamento via <strong>Pix</strong>.<br>Ao clicar em <strong>OK</strong>, você será levado ao WhatsApp para enviar o <strong>comprovante</strong> e agendarmos seu horário.`,
+        lblItem:   'Serviço',
+        lblValor:  'Valor',
+        nome:      nome,
+        valor:     valor,
+        url:       url
+      });
+    });
+  });
+
+  // botões de fechar
+  btnCancel.addEventListener('click', close);
+  btnClose.addEventListener('click', close);
+  btnOk.addEventListener('click', confirm);
+
+  // fechar ao clicar fora do modal
+  overlay.addEventListener('click', e=>{
+    if(e.target === overlay) close();
+  });
+
+  // ESC fecha
+  document.addEventListener('keydown', e=>{
+    if(e.key === 'Escape' && overlay.classList.contains('show')) close();
+  });
+
+  // copiar chave PIX
+  btnCopy.addEventListener('click', async ()=>{
+    const key = elPix.textContent.trim();
+    try{
+      await navigator.clipboard.writeText(key);
+      btnCopy.classList.add('copied');
+      btnCopy.textContent = '✓ Copiado';
+      setTimeout(()=>{
+        btnCopy.classList.remove('copied');
+        btnCopy.textContent = 'Copiar';
+      }, 2200);
+    }catch(err){
+      const tmp = document.createElement('textarea');
+      tmp.value = key; document.body.appendChild(tmp);
+      tmp.select(); document.execCommand('copy');
+      document.body.removeChild(tmp);
+      btnCopy.textContent = '✓ Copiado';
+      setTimeout(()=>{ btnCopy.textContent = 'Copiar'; }, 2200);
+    }
+  });
+})();
+</script>
+
 </body>
 </html>
